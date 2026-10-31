@@ -1,0 +1,36 @@
+name: Julia SDK
+
+on:
+  push:
+    paths:
+      - '**/*.jl'
+      - 'Project.toml'
+      - 'test/fixtures/**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        julia-version: ['1.10', '1']
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: ${{ matrix.julia-version }}
+      - uses: julia-actions/cache@v2
+      - name: Install Ed25519 library on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libsodium23
+      - name: Instantiate
+        run: julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
+      - name: Tests
+        run: julia --project=. -e 'using Pkg; Pkg.test()'
+      - name: Fuzz
+        run: julia --project=. fuzz/fuzz.jl 2000
