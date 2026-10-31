@@ -24,6 +24,8 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.julia-version }}
+      - name: Resolve dependencies for this Julia version
+        run: rm -f Manifest.toml
       - uses: julia-actions/cache@v2
       - name: Install Ed25519 library on Linux
         if: runner.os == 'Linux'
