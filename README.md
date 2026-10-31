@@ -15,7 +15,32 @@ Standalone Julia 1.10+ package for the Amaquet native TCP/TLS protocol and separ
 - Native `libsodium` installed and discoverable when connecting to an Amaquet server that advertises a signed Ed25519 identity; missing cryptography support **fails closed**. The caller can require a fingerprint or public key pin. On Debian/Ubuntu: `sudo apt-get install libsodium23`. On macOS: `brew install libsodium`.
 - For native TLS, the server must present a certificate chain trusted by the client's CA store and a certificate matching the endpoint hostname. This SDK does not provide an insecure TLS bypass.
 
-## Install from source
+## Installation
+
+### From GitHub
+
+Install the current package directly from the repository:
+
+```julia
+using Pkg
+Pkg.add(url="https://github.com/newfoundcodes/amaquet-julia-sdk")
+```
+
+To install the `v0.1.0` release explicitly:
+
+```julia
+using Pkg
+Pkg.add(url="https://github.com/newfoundcodes/amaquet-julia-sdk", rev="v0.1.0")
+```
+
+After the package is available in the Julia General registry, it can also be installed by name:
+
+```julia
+using Pkg
+Pkg.add("Amaquet")
+```
+
+### From a local checkout
 
 ```bash
 unzip amaquet-julia-sdk.zip
